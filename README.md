@@ -4,7 +4,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](SKILL.md)
-[![Version](https://img.shields.io/badge/version-v2-0f766e)](meta.json)
+[![Version](https://img.shields.io/badge/version-v2.1-0f766e)](meta.json)
 
 `whojay` 不是一份泛化的“人设提示词”，而是一套可以直接交给 Codex 使用的工作方法：先从实时证据建立事实边界，再明确范围和验收条件，在授权范围内执行，并用可复查的验证与产物完成闭环。
 
@@ -45,9 +45,9 @@
 
 因此，这个仓库既保留 Codex 可直接使用的合并 Skill，也保留 dot-skill 的拆分产物和 schema v3 元数据，便于后续校正、重新生成和版本追踪。
 
-## v2：自动重构每次输入
+## v2.1：单次输入重构与防循环恢复
 
-v2 集成了 `refine-user-prompt` 的核心请求重构能力。每次收到新任务时，`whojay` 会先：
+v2.1 集成了 `refine-user-prompt` 的核心请求重构能力，并把触发边界收紧到每个用户 turn 最多一次。收到建立或改变请求合同的新消息时，`whojay` 会：
 
 1. 提取用户真正需要的结果、已知事实、成功标准、范围、权限、证据要求和输出格式；
 2. 删除重复或不影响行为的描述，按任务复杂度保留最少必要结构；
@@ -68,6 +68,8 @@ v2 集成了 `refine-user-prompt` 的核心请求重构能力。每次收到新�
 > 重构提示词中的“目标”只是对预期结果的描述，不等于创建持久化 Codex Goal。`whojay` 不会因为任务复杂、长期、跨文件、像论文或适合跟踪就主动设置 Goal；只有用户在当前请求中明确提醒或要求“创建 Goal / 设置目标”时才会创建。Goal 也不会扩大删除、发布、付费调用或 GPU 运行等操作权限。
 
 自动重构不会偷偷加入事实、权限、工具、交付物、截止时间或质量承诺。模型与思考强度只是建议，不代表运行配置已经被切换。
+
+工具回执、自动 continuation、上下文压缩恢复、中断恢复和同一 turn 内的再次推理不会重新触发输入重构。用户只说“继续”或“开始执行”且合同没有变化时，直接从最近的已验证状态恢复；相同计划或前置说明连续两次没有新证据时，禁止第三次重复，必须执行具体动作或报告真实阻塞。
 
 ## 核心工作模型
 
