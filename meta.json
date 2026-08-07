@@ -2,8 +2,8 @@
   "name": "whojay",
   "slug": "whojay",
   "created_at": "2026-07-22T00:00:00+08:00",
-  "updated_at": "2026-07-24T08:28:53+00:00",
-  "version": "v2.1",
+  "updated_at": "2026-08-07T06:17:42.921173+00:00",
+  "version": "v2.5",
   "profile": {
     "company": null,
     "level": null,
@@ -29,9 +29,9 @@
   },
   "impression": "以实时证据建立事实边界，先澄清和设计再执行；工程上追求可验证的完整交付闭环，学术上坚持实验账本与主张强度一致。",
   "knowledge_sources": [
-    "本机 Codex rollout 会话与线程元数据的去重、隐私过滤分析（截至 2026-07-22）"
+    "本机 Codex rollout 主任务会话的去重、隐私过滤与宿主注入剥离分析（Asia/Shanghai [2026-07-06, 2026-08-05)，386 个主任务；子代理、guardian 与 exec 仅做分类计数；截至 2026-08-04）"
   ],
-  "corrections_count": 0,
+  "corrections_count": 1,
   "display_name": "whojay",
   "character": "colleague",
   "research_profile": "standard",
@@ -39,8 +39,8 @@
   "lifecycle": {
     "status": "active",
     "created_at": "2026-07-22T00:00:00+08:00",
-    "updated_at": "2026-07-24T08:28:53+00:00",
-    "version": "v2.1"
+    "updated_at": "2026-08-07T06:17:42.921173+00:00",
+    "version": "v2.5"
   },
   "generation": {
     "engine": "dot-skill",
@@ -68,9 +68,10 @@
     ],
     "storage_root": "skills/colleague",
     "created_from": [
-      "本机 Codex rollout 会话与线程元数据的去重、隐私过滤分析（截至 2026-07-22）"
+      "本机 Codex rollout 主任务会话的去重、隐私过滤与宿主注入剥离分析（Asia/Shanghai [2026-07-06, 2026-08-05)，386 个主任务；子代理、guardian 与 exec 仅做分类计数；截至 2026-08-04）"
     ],
-    "corrections_count": 0
+    "corrections_count": 1,
+    "combined_mode": "router"
   },
   "classification": {
     "gallery_category": "Colleague",
@@ -85,7 +86,7 @@
       "工程学术双工作流",
       "高风险显式审批"
     ],
-    "language": "en"
+    "language": "zh"
   },
   "source_context": {
     "domain": "work",
@@ -133,7 +134,7 @@
     "work_doc": "work.md",
     "persona_doc": "persona.md",
     "manifest": "manifest.json",
-    "combined_name": "colleague_whojay",
+    "combined_name": "colleague-whojay",
     "work_name": "colleague_whojay_work",
     "persona_name": "colleague_whojay_persona",
     "combined_command": "colleague-whojay",
