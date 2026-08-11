@@ -59,6 +59,8 @@ v2.5 将请求整理从默认可见的元提示步骤改为内部合同。每个
 
 `whojay` 现在还提供 Skill 路由合同：优先使用用户点名的 Skill，其次选择最窄的专业 Skill，再由 `whojay` 负责跨 Skill 统筹、权限边界、结果整合和最终验证。重叠 Skill 不因关键词匹配而重复加载；不可用的 provider、model、tool 或 Skill 不会被静默替代。
 
+当用户显式调用 `whojay` 处理非简单工程或学术工作流时，入口还会遵循当前 `AGENTS.md` 中的角色路由和最终验收门禁。每次子任务必须使用完整、边界明确的 `WORK_PACKET_V1`；DeepSeek 等跨 provider 路由需要独立的无凭据 packet、唯一任务名和精确清理，且外部 reviewer 不能替代要求的原生最终审查。
+
 Work 与 Persona 保持职责分离：`work.md` 负责工程、学术、验证、运行时和多代理流程；`persona.md` 负责表达、判断、纠偏和 continuation 风格。`work_skill.md` 与 `persona_skill.md` 是先读取 Core contract 再加载相应正文的薄入口，不再复制完整正文。
 
 恢复、授权、事实等级、实验账本和完成定义仍以 `SKILL.md` 与对应 Work 章节为准；工具回执、子代理总结和模拟审查不能替代正式证据。

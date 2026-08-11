@@ -83,3 +83,28 @@ Before invoking a named skill or capability, verify that it is available in the 
 3. Load the minimum relevant reference sections, if any.
 4. Act once the evidence is sufficient.
 5. Verify the observable result and stop.
+
+## Explicit orchestration contract
+
+When the user explicitly invokes this skill for a non-trivial engineering or academic workflow, use the applicable `AGENTS.md` role names and acceptance gates as the authoritative route. This skill does not create a second orchestrator: the current/root task retains intent, authority, evidence admission, architecture, integration, verification, and final acceptance.
+
+Before every child call, construct a complete `WORK_PACKET_V1` with objective, allowed side effects, owned files or read-only scope, verified evidence, interfaces/constraints, dependencies/stop conditions, acceptance, verification, and return protocol. Invoke the exact required custom `agent_type` with `fork_turns = "none"`. If the role is unavailable or the route is rejected, stop that phase without substituting a similar role, model, provider, or effort.
+
+When the user explicitly requests DeepSeek, invoke the exact `deepseek_flash` role. Native cross-provider message bodies may be opaque, so first choose a globally unique task name `deepseek_<purpose>_<nonce>` matching the anchored grammar `^deepseek_[a-z0-9][a-z0-9_]*_[0-9a-f]{16,32}$`, with a 16-32 lowercase-hex nonce. Atomically reserve a mode-0700 `/tmp/codex-deepseek-packets/<task_name>` directory with `mkdir`; if it exists, do not reuse or alter it and choose a new name. Materialize only `/tmp/codex-deepseek-packets/<task_name>/WORK_PACKET.md` inside it, set mode-0600, and validate before spawn. Initial non-empty lines are `DEEPSEEK_PACKET_V1`, `TASK_NAME: <task_name>`, `CREDENTIALS: none`, `PACKET_KIND: initial`, `WORK_PACKET_V1`, and `SOURCE_VERSION: 1`; every canonical section appears exactly once, in order, with substantive content and no credentials. Credential-pattern validation is defense in depth, not proof; root must semantically confirm no credential material is present. Use the same task name for the spawn. Because `send_message` and `followup_task` are also opaque, a correction uses `PACKET_KIND: correction`, `SOURCE_VERSION` at least 2, substantive `FINDING_IDS`, a newly reserved task directory, and a new unique task name; spawn a new `deepseek_flash` child only after the prior child is terminal. After root accepts each terminal result and no correction remains, root verifies the result, deletes only that exact generated `WORK_PACKET.md`, and removes only its now-empty task directory. The role is a general-purpose workspace-write worker and may inspect, implement, test, research, or review within the packet's authority; a read-only or review packet still forbids mutations. Require a `DEEPSEEK_REPORT`, and do not treat its broader sandbox as hard review isolation or silently substitute it for a required native final gate.
+
+For engineering work:
+
+1. Use `repo_runtime_analyst` only when the reported failure or current state is not yet established; use `code_issue_miner` only for an explicitly requested bounded issue scan.
+2. Use `engineering_planner` when an execution roadmap materially reduces risk. Use `engineering_risk_reviewer` only at a concrete architecture, security, concurrency, persistence, permission, migration, recovery, or operational commitment boundary.
+3. Delegate bounded implementation to `implementation_engineer`; use `delivery_integrator` only when cross-component reconciliation is the deliverable. Use `test_engineer` only for an independent test-owned slice.
+4. Inspect the complete actual diff/working state and rerun the required checks in the root task.
+5. For delegated or non-trivial changes, invoke a fresh read-only `code_reviewer` and require `FINAL_REVIEW: ship | fix-first | rethink`. Any relevant code/test change invalidates the verdict. Send bounded corrections to the same writer when ownership is unchanged, verify again, and obtain a new fresh review.
+
+For claim-bearing academic work:
+
+1. Use `literature_scout` for bounded evidence discovery, `literature_novelty_scout` only for closest-work/novelty judgment, and `research_synthesizer` only for an admitted evidence packet. Use generic `research` only when acquisition and analysis cannot be cleanly separated.
+2. Use `scientific_editor` only for assigned artifacts after the evidence boundary is explicit.
+3. Verify citations, numbers, artifacts, and claim provenance in the root task after the final edit.
+4. Invoke a fresh read-only `experiment_claim_auditor` and require `CLAIM_AUDIT: pass | revise | block`. Any later claim-bearing change invalidates `pass`; corrections return to the current owner and require a new audit.
+
+Treat role files as configured intent, spawn acceptance as route evidence, and effective model/effort/sandbox metadata as runtime evidence only when exposed by the host. Child prose never proves its identity or isolation. A reviewer/auditor must remain behaviorally read-only; if hard isolation is required and the observed sandbox is missing or broader, stop the gate rather than overstate the guarantee.
