@@ -1,6 +1,8 @@
 # whojay Skill
 
 > 使用 [dot-skill](https://github.com/titanwings/colleague-skill) 从真实 Codex 工作记录中蒸馏出的工程与学术双工作流 Skill。
+>
+> An evidence-driven Codex skill for engineering and academic work.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-111827)](SKILL.md)
@@ -15,6 +17,25 @@
 - **工程—学术衔接**：把研究假设落实为可复现的软件和实验，再把工程产物转化为有证据边界的学术主张。
 - **静默请求合同**：内部整理结果、权限、约束和验收条件；只有实质性歧义或用户要求时才展示重构内容。
 - **Skill 路由**：选择最小、非重叠的专业 Skill，并由 whojay 保留授权、集成和最终验证。
+
+## 快速开始
+
+从公开仓库安装默认入口（文档命令；文件复制路径已在临时目录 smoke 测试）：
+
+```bash
+git clone --depth 1 https://github.com/WhoJay0609/whojay-skill.git
+mkdir -p ~/.codex/skills/colleague-whojay
+cp whojay-skill/{SKILL.md,work.md,persona.md,work_skill.md,persona_skill.md,README.md,manifest.json,meta.json} \
+  ~/.codex/skills/colleague-whojay/
+```
+
+新建 Codex 任务（或重启以刷新技能列表），然后调用（首次调用示例；本仓库未运行 Codex 宿主）：
+
+```text
+$colleague-whojay 只做只读诊断：检查这个仓库为什么加载失败，给出根因证据。
+```
+
+默认入口会先按当前请求整理范围、授权、证据和验收条件，再按需加载 Work 或 Persona 正文；不会因为安装命令本身创建 Goal 或执行外部操作。
 
 ## 为什么做这个 Skill
 
@@ -133,20 +154,7 @@ Skill 要求所有重要结论落入以下一种状态：
 
 ### 手动安装
 
-```bash
-git clone --depth 1 https://github.com/WhoJay0609/whojay-skill.git
-mkdir -p ~/.codex/skills/colleague-whojay
-cp whojay-skill/{SKILL.md,work.md,persona.md,work_skill.md,persona_skill.md,README.md,manifest.json,meta.json} \
-  ~/.codex/skills/colleague-whojay/
-```
-
-安装后在新的 Codex 任务中调用：
-
-```text
-$colleague-whojay 按照我的工作流处理这个任务
-```
-
-如果技能列表尚未刷新，新建任务或重新启动 Codex。
+命令和首次调用见上面的[快速开始](#快速开始)。安装后在新的 Codex 任务中调用；如果技能列表尚未刷新，请新建任务或重新启动 Codex。
 
 ## 使用示例
 
@@ -174,6 +182,22 @@ $colleague-whojay 评估这个研究 idea：先做 closest-work collision，再�
 $colleague-whojay 检查论文中每个数字和主张是否有正式实验产物支持，并区分 verified、inferred 和 unverified。
 ```
 
+### 输入与可核对输出（说明性示例）
+
+下面展示输出结构；方括号中的内容必须由当前仓库、日志或产物填充，不是预先测得的结果：
+
+```text
+输入：$colleague-whojay 只做只读诊断：检查服务为什么加载失败，不要修改文件或重启服务。
+
+输出：
+结果：[根据实时证据得到的首个错误状态或根因]
+已验证：[实际读取的路径、日志、命令及结果]
+未验证：[仍缺少的运行时或外部证据]
+范围：[只读；没有文件、服务或远端写入]
+```
+
+如果任务授权实现，输出还应列出实际修改、分层验证和剩余风险；模拟结果或工具回执不能替代正式证据。
+
 ## 仓库结构
 
 | 文件 | 作用 |
@@ -187,6 +211,13 @@ $colleague-whojay 检查论文中每个数字和主张是否有正式实验产�
 | [`manifest.json`](manifest.json) | dot-skill v3 清单、entrypoint 与运行时声明 |
 
 当前公开包以 `SKILL.md` 的 Codex 直接安装路径为主要验证对象。Codex 也支持通过两个薄入口独立加载 Work 或 Persona；其他运行时是否解析这些相对引用需要在对应环境单独验证。更新时应先修改 canonical 正文，再同步入口和元数据，避免 Work、Persona 与运行时内容漂移。
+
+## 兼容性
+
+| 入口 | 状态 | 依据 |
+| --- | --- | --- |
+| Codex 本地 Skill | documented；仓库契约测试与临时目录复制 smoke 已通过（2026-09-12） | [`SKILL.md`](SKILL.md)、[`tests/test_skill_contract.py`](tests/test_skill_contract.py) |
+| `manifest.json` 中列出的其他运行时 | declared；本仓库未做运行时测试 | [`manifest.json`](manifest.json) 的 `compatible_runtimes` |
 
 ## 历史蒸馏依据
 
@@ -208,6 +239,12 @@ v2.5 是基于现有 Work/Persona 证据的人工结构校正与路由增强，�
 - 自动重构输入不扩大用户授权；持久化 Codex Goal 只接受当前请求中的明确创建指令。
 - 未经明确授权，不应执行删除、远程发布、外部消息、付费调用或 GPU 正式运行。
 - 学术工作流帮助管理证据边界，但不能自动证明新颖性、科学有效性、同行评审结果或论文录用。
+
+## 贡献与求助
+
+- 行为契约的修改应先更新 [`SKILL.md`](SKILL.md)；Work、Persona 和薄入口保持职责分离，并运行 `python3 -m unittest discover -s tests -v`。
+- 文档或安装问题请附上调用文本、使用的入口、期望行为和实际输出；提交前删除凭据、会话标识符和本机路径。
+- 报告问题时请区分已验证事实、合理推断和未知项，便于复查而不把建议误当成能力承诺。
 
 ## License
 
