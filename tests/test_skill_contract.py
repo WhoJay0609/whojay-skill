@@ -50,6 +50,7 @@ class SkillContractTests(unittest.TestCase):
             "## Progressive loading",
             "## Skill routing",
             "## Execution loop",
+            "## Explicit orchestration contract",
         ):
             with self.subTest(heading=heading):
                 self.assertIn(heading, text)
